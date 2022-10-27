@@ -996,7 +996,7 @@ export default class DevServer {
     }
 
     if (devProcess) {
-      ops.push(treeKill(devProcess.pid));
+      ops.push(treeKill(devProcess.pid as number));
     }
 
     ops.push(close(this.server));
@@ -1372,9 +1372,9 @@ export default class DevServer {
       if (rr.dest) {
         if (rr.query) {
           const destParsed = url.parse(rr.dest);
-          const destQuery = parseQueryString(destParsed.search);
+          const destQuery = parseQueryString(destParsed.search as string);
           Object.assign(destQuery, rr.query);
-          destParsed.search = formatQueryString(destQuery);
+          destParsed.search = formatQueryString(destQuery) as string;
           return url.format(destParsed);
         }
         return rr.dest;
@@ -1595,9 +1595,9 @@ export default class DevServer {
       if (routeResult.isDestUrl) {
         // Mix the `routes` result dest query params into the req path
         const destParsed = url.parse(routeResult.dest);
-        const destQuery = parseQueryString(destParsed.search);
+        const destQuery = parseQueryString(destParsed.search as string);
         Object.assign(destQuery, routeResult.query);
-        destParsed.search = formatQueryString(destQuery);
+        destParsed.search = formatQueryString(destQuery) as string;
         const destUrl = url.format(destParsed);
 
         debug(`ProxyPass: ${destUrl}`);
@@ -1775,10 +1775,10 @@ export default class DevServer {
 
         this.setResponseHeaders(res, requestId);
         const origUrl = url.parse(req.url || '/');
-        const origQuery = parseQueryString(origUrl.search);
+        const origQuery = parseQueryString(origUrl.search as string);
         origUrl.pathname = dest;
         Object.assign(origQuery, query);
-        origUrl.search = formatQueryString(origQuery);
+        origUrl.search = formatQueryString(origQuery) as string;
         req.url = url.format(origUrl);
         return proxyPass(req, res, upstream, this, requestId, false);
       }
@@ -1801,10 +1801,10 @@ export default class DevServer {
       buildResult.routes.length > 0
     ) {
       const origUrl = url.parse(req.url || '/');
-      const origQuery = parseQueryString(origUrl.search);
+      const origQuery = parseQueryString(origUrl.search as string);
       origUrl.pathname = dest;
       Object.assign(origQuery, query);
-      origUrl.search = formatQueryString(origQuery);
+      origUrl.search = formatQueryString(origQuery) as string;
       const newUrl = url.format(origUrl);
       debug(
         `Checking build result's ${buildResult.routes.length} \`routes\` to match ${newUrl}`
@@ -1903,9 +1903,9 @@ export default class DevServer {
 
         // Mix in the routing based query parameters
         const origUrl = url.parse(req.url || '/');
-        const origQuery = parseQueryString(origUrl.search);
+        const origQuery = parseQueryString(origUrl.search as string);
         Object.assign(origQuery, query);
-        origUrl.search = formatQueryString(origQuery);
+        origUrl.search = formatQueryString(origQuery) as string;
         req.url = url.format({
           pathname: origUrl.pathname,
           search: origUrl.search,
@@ -2018,9 +2018,9 @@ export default class DevServer {
 
         // Mix the `routes` result dest query params into the req path
         const origUrl = url.parse(req.url || '/');
-        const origQuery = parseQueryString(origUrl.search);
+        const origQuery = parseQueryString(origUrl.search as string);
         Object.assign(origQuery, query);
-        origUrl.search = formatQueryString(origQuery);
+        origUrl.search = formatQueryString(origQuery) as string;
         const path = url.format({
           pathname: origUrl.pathname,
           search: origUrl.search,
@@ -2208,7 +2208,7 @@ export default class DevServer {
     }
 
     if (this.devProcess) {
-      await treeKill(this.devProcess.pid);
+      await treeKill(this.devProcess.pid as number);
     }
 
     this.output.log(

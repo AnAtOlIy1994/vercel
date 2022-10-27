@@ -58,7 +58,7 @@ export async function devRouter(
 ): Promise<RouteResult> {
   let result: RouteResult | undefined;
   let { pathname: reqPathname = '/', search: reqSearch } = url.parse(reqUrl);
-  const reqQuery = parseQueryString(reqSearch);
+  const reqQuery = parseQueryString(reqSearch as string);
   const combinedHeaders: HttpHeadersConfig = { ...previousHeaders };
   let status: number | undefined;
   let isContinue = false;
@@ -85,10 +85,11 @@ export async function devRouter(
       const flags = devServer && devServer.isCaseSensitive() ? '' : 'i';
       const matcher = PCRE(`%${src}%${flags}`, keys);
       const match =
-        matcher.exec(reqPathname) || matcher.exec(reqPathname.substring(1));
+        matcher.exec(reqPathname as string) ||
+        matcher.exec((reqPathname as string).substring(1));
 
       if (match) {
-        let destPath: string = reqPathname;
+        let destPath: string = reqPathname as string;
 
         if (routeConfig.dest) {
           destPath = resolveRouteParameters(routeConfig.dest, match, keys);
@@ -132,7 +133,7 @@ export async function devRouter(
         ) {
           const { pathname = '/' } = url.parse(destPath);
           const hasDestFile = await devServer.hasFilesystem(
-            pathname,
+            pathname as string,
             vercelConfig
           );
 
@@ -188,11 +189,11 @@ export async function devRouter(
           }
           const { pathname: destPathname = '/', search: destSearch } =
             url.parse(destPath);
-          const destQuery = parseQueryString(destSearch);
+          const destQuery = parseQueryString(destSearch as string);
           Object.assign(destQuery, reqQuery);
           result = {
             found: true,
-            dest: destPathname,
+            dest: destPathname as string,
             continue: isContinue,
             userDest: Boolean(routeConfig.dest),
             isDestUrl,
@@ -212,7 +213,7 @@ export async function devRouter(
   if (!result) {
     result = {
       found: false,
-      dest: reqPathname,
+      dest: reqPathname as string,
       continue: isContinue,
       status,
       isDestUrl: false,

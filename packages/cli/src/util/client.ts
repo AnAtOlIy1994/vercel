@@ -1,8 +1,7 @@
 import { bold } from 'chalk';
 import inquirer from 'inquirer';
 import { EventEmitter } from 'events';
-import { URLSearchParams } from 'url';
-import { parse as parseUrl } from 'url';
+import { URLSearchParams, parse as parseUrl } from 'url';
 import { VercelConfig } from '@vercel/client';
 import retry, { RetryFunction, Options as RetryOptions } from 'async-retry';
 import fetch, { BodyInit, Headers, RequestInit, Response } from 'node-fetch';
@@ -93,7 +92,7 @@ export default class Client extends EventEmitter implements Stdio {
       : '';
 
     if (opts.accountId || opts.useCurrentTeam !== false) {
-      const query = new URLSearchParams(parsedUrl.query);
+      const query = new URLSearchParams(parsedUrl.query as any);
 
       if (opts.accountId) {
         if (opts.accountId.startsWith('team_')) {

@@ -87,7 +87,7 @@ async function createBuildProcess(
 
   return new Promise((resolve, reject) => {
     // The first message that the builder process sends is the `ready` event
-    buildProcess.once('message', ({ type }) => {
+    buildProcess.once('message', ({ type }: { type: string }) => {
       if (type !== 'ready') {
         reject(new Error('Did not get "ready" event from builder'));
       } else {
@@ -491,7 +491,7 @@ export async function shutdownBuilder(
   if (match.buildProcess) {
     const { pid } = match.buildProcess;
     debug(`Killing builder sub-process with PID ${pid}`);
-    const killPromise = treeKill(pid)
+    const killPromise = treeKill(pid as number)
       .then(() => {
         debug(`Killed builder with PID ${pid}`);
       })
